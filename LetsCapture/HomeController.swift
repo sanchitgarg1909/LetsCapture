@@ -23,10 +23,10 @@ class HomeController: UICollectionViewController,UICollectionViewDelegateFlowLay
         collectionView?.reloadData()
     }
     func getImages() {
-        
-        if let imageUrl = realm.objects(Image.self).first?.path {
-            if let image = UIImage(contentsOfFile: imageUrl) {
-                print(image)
+        images.removeAll()
+        let imageUrls = realm.objects(Image.self)
+        for imageUrl in imageUrls {
+            if let image = UIImage(contentsOfFile: imageUrl.path) {
                 images.append(image)
             }
         }

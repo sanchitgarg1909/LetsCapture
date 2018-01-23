@@ -45,9 +45,16 @@ class ImagePreviewController: UIViewController {
     
     @objc func saveImage() {
         print("save image here")
-        
+        let prefs = UserDefaults.standard
+        var iterarator = 0
         if let data = UIImageJPEGRepresentation(imagePreview!, 1) {
-            let filename = getDocumentsDirectory().appendingPathComponent("filename")
+            if (prefs.object(forKey: "iterator") == nil) {
+                iterarator = 1
+            }
+            else {
+                iterarator = prefs.integer(forKey: "iterator")
+            }
+            let filename = getDocumentsDirectory().appendingPathComponent("Image\(String(describing: iterarator))")
             let image = Image()
             image.path = filename.path
             try? data.write(to: filename)
@@ -56,6 +63,8 @@ class ImagePreviewController: UIViewController {
             try! realm.write {
                 realm.add(image)
             }
+            iterarator += 1
+            prefs.set(iterarator, forKey: "iterator")
         }
         
         self.dismiss(animated: true, completion: nil)
